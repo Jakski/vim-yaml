@@ -1,0 +1,17 @@
+---
+# comment
+dict:
+  key1: 'value1'
+  key2: value2
+  key3: value3
+  [key4,2]: value4
+  key5: |
+    sdfsf
+    sdsdf
+
+list:
+  - wer
+    sdf
+    sdf
+  - 2
+  - war
