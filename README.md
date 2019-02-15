@@ -29,6 +29,11 @@ $ pip install -r requirements.txt
 
 - `YamlError` - display error description
 
+## Limitations
+
+`vim-yaml` highlights syntax based on syntax tokens. It doesn't detect semantic
+errors like duplicating key in dictionary.
+
 ## TODO
 
 - integration tests including Neovim's RPC interactions
