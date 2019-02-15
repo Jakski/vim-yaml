@@ -25,6 +25,8 @@ class Highlighter:
             tokens.BlockEntryToken:        'Operator',
             tokens.DocumentStartToken:     'PreProc',
             tokens.DocumentEndToken:       'PreProc',
+            tokens.AnchorToken:            'Type',
+            tokens.AliasToken:             'Type',
             # Used for dictionary keys, if they are scalars
             'key':                         'Identifier',
         }
