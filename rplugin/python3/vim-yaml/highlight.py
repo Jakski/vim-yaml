@@ -24,6 +24,7 @@ class Highlighter:
             tokens.FlowSequenceEndToken:   'Special',
             tokens.BlockEntryToken:        'Operator',
             tokens.DocumentStartToken:     'PreProc',
+            tokens.DocumentEndToken:       'PreProc',
             # Used for dictionary keys, if they are scalars
             'key':                         'Identifier',
         }

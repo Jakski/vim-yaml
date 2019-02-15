@@ -34,10 +34,22 @@ class HighlightTest(TestCase):
         self.assertEqual([(0, 1, -1), (1,), (2, 0, 5)],
                          self.split_region(0, 1, 2, 5))
 
-    def test_scan_simple_dictionary(self):
+    def test_successful_scanning(self):
         document = self.read_yaml_file('dict.yml')
         self.highlighter.end = len(document.splitlines())
+        highlights = list(self.highlighter.highlight(document))
+        self.assertEqual(len(highlights), 14)
+        self.assertEqual(highlights[0][0], 'Identifier')
+        self.assertEqual(highlights[1][0], 'Special')
+        self.assertEqual(highlights[2][0], 'String')
+
+    def test_failed_scanning(self):
+        document = self.read_yaml_file('malformed.yml')
+        self.highlighter.end = len(document.splitlines())
+        error = None
         try:
-            print(list(self.highlighter.highlight(document)))
-        except ScannerError as e:
-            print(e)
+            list(self.highlighter.highlight(document))
+        except Exception as e:
+            error = e
+        self.assertIsInstance(error, ScannerError)
+        self.assertEqual(error.problem_mark.line, 8)
