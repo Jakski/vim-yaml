@@ -32,7 +32,7 @@ $ pip install -r requirements.txt
 ## Limitations
 
 `vim-yaml` highlights syntax based on syntax tokens. It doesn't detect semantic
-errors like duplicating key in dictionary.
+errors like duplicated key in dictionary.
 
 ## TODO
 
