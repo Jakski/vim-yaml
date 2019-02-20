@@ -29,6 +29,7 @@ class Plugin:
         self._error = None
         self._src_id = None
         self._input_mode = False
+        self._buffer = None
 
     @pynvim.function('_yaml_init', sync=True)
     def init_with_nvim(self, args):
@@ -44,14 +45,21 @@ class Plugin:
             return 'No error\'s been discovered so far.'
 
     @pynvim.rpc_export('yaml_highlight', sync=False)
-    def highlight(self, start, end, imode):
+    def highlight(self, start, end, imode, full):
         self._input_mode = bool(imode)
-        self._highlighter.start = start - 1
-        self._highlighter.end = end - 1
+        self._buffer = self._nvim.current.buffer
+        full = bool(full)
+        if full:
+            self._highlighter.start = 1
+            self._highlighter.end = len(self._buffer)
+        else:
+            self._highlighter.start = start - 1
+            self._highlighter.end = end - 1
         highlights = []
         try:
+            lines = [line for line in self._buffer]
             for highlight in self._highlighter.highlight(
-                    '\n'.join(self._nvim.current.buffer)):
+                    '\n'.join(lines)):
                 highlights.append(highlight)
         except ScannerError as e:
             self.sign_error(e)
@@ -63,7 +71,7 @@ class Plugin:
         else:
             hl_start = start
             hl_end = end
-        self._nvim.current.buffer.update_highlights(
+        self._buffer.update_highlights(
             self._src_id,
             highlights,
             clear_start=hl_start,
@@ -82,7 +90,7 @@ class Plugin:
             self.SIGN_ID,
             error.problem_mark.line,
             'yamlError',
-            self._nvim.current.buffer.name))
+            self._buffer.name))
 
     @feature_enabled('error_signs', lambda x: x == 1)
     def clear_errors(self):

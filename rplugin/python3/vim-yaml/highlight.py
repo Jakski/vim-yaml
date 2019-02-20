@@ -1,14 +1,14 @@
 from ruamel.yaml.reader import Reader
-from ruamel.yaml.scanner import RoundTripScanner
+from ruamel.yaml.scanner import Scanner
 from ruamel.yaml.resolver import VersionedResolver
 from ruamel.yaml import tokens
 
 
-class Loader(Reader, RoundTripScanner, VersionedResolver):
+class Loader(Reader, Scanner, VersionedResolver):
 
     def __init__(self, stream, version=None):
         Reader.__init__(self, stream, loader=self)
-        RoundTripScanner.__init__(self, loader=self)
+        Scanner.__init__(self, loader=self)
         VersionedResolver.__init__(self, version, loader=self)
 
 

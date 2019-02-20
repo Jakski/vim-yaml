@@ -20,11 +20,9 @@ endif
 
 augroup Yaml
 	execute 'autocmd BufEnter ' . g:yaml#patterns . ' call <SID>Init()'
-	execute 'autocmd BufEnter ' . g:yaml#patterns . ' call <SID>Highlight(0)'
-	execute 'autocmd CursorMoved ' . g:yaml#patterns . ' call <SID>Highlight(0)'
-	execute 'autocmd CursorMovedI ' . g:yaml#patterns . ' call <SID>Highlight(1)'
-	execute 'autocmd TextChanged ' . g:yaml#patterns . ' call <SID>Highlight(0)'
-	execute 'autocmd TextChangedI ' . g:yaml#patterns . ' call <SID>Highlight(1)'
+	execute 'autocmd BufEnter ' . g:yaml#patterns . ' call <SID>Highlight(0, 1)'
+	execute 'autocmd TextChanged ' . g:yaml#patterns . ' call <SID>Highlight(0, 0)'
+	execute 'autocmd TextChangedI ' . g:yaml#patterns . ' call <SID>Highlight(1, 0)'
 augroup END
 
 sign define yamlError text=E> texthl=ErrorMsg
@@ -39,8 +37,8 @@ function s:GetError() abort
 	echo rpcrequest(g:yaml#_channel_id, 'yaml_get_error')
 endfunction
 
-function s:Highlight(imode) abort
-	call rpcnotify(g:yaml#_channel_id, 'yaml_highlight', line('w0'), line('w$'), a:imode)
+function s:Highlight(imode, full) abort
+	call rpcnotify(g:yaml#_channel_id, 'yaml_highlight', line('w0'), line('w$'), a:imode, a:full)
 endfunction
 
 let g:loaded_yaml = 1
