@@ -50,14 +50,14 @@ class Plugin:
         self._buffer = self._nvim.current.buffer
         full = bool(full)
         if full:
-            self._highlighter.start = 1
+            self._highlighter.start = 0
             self._highlighter.end = len(self._buffer)
         else:
             self._highlighter.start = start - 1
             self._highlighter.end = end - 1
         highlights = []
+        lines = list(self._buffer)
         try:
-            lines = [line for line in self._buffer]
             for highlight in self._highlighter.highlight(
                     '\n'.join(lines)):
                 highlights.append(highlight)
@@ -77,6 +77,9 @@ class Plugin:
             clear_start=hl_start,
             clear_end=hl_end,
             async_=True)
+        for index, line in enumerate(lines):
+            if line.lstrip().startswith('#'):
+                self._buffer.clear_highlight(self._src_id, index, index + 1)
 
     def check_feature(self, feature, func):
         return func(self._nvim.vars['yaml#' + feature])
